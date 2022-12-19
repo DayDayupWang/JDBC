@@ -4,7 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-
+<typeAliases>
+    <package name="com.itheima.pojo"/>
+</typeAliases>
+        
 
     <!--
     environments：配置数据库连接环境信息。可以配置多个environment，通过default属性切换不同的environment

@@ -4,7 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-
+<typeAliases>
+    <package name="com.itheima.pojo"/>
+</typeAliases>
+        
 
     <!--
     environments：配置数据库连接环境信息。可以配置多个environment，通过default属性切换不同的environment
@@ -23,10 +26,10 @@
     </environments>
     <mappers>
         <!--加载sql映射文件-->
-       <mapper resource="com/itheima/mapper/UserMapper.xml"/>
+<!--       <mapper resource="com/itheima/mapper/UserMapper.xml"/>-->
 
         <!--Mapper代理方式-->
-<!--        <package name="com.itheima.mapper"/>-->
+        <package name="com.itheima.mapper"/>
 
     </mappers>
 
