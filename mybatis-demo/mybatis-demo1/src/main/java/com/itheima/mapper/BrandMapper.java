@@ -26,4 +26,13 @@ public interface BrandMapper {
 
 // List<Brand> selectByCondition(Brand brand);
  List<Brand> selectByCondition(Map map);
+
+ List<Brand> selectByConditionSingle(Map map);
+
+ void add(Brand brand);
+ //修改
+ int update(Brand brand);
+
+ void deleteById(Brand brand);
+ void deleteByIds(@Param("ids") int[] ids);
 }

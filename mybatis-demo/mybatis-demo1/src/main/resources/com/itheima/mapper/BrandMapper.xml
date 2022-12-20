@@ -6,21 +6,70 @@
 
 <mapper namespace="com.itheima.mapper.BrandMapper">
 
-<!--    <sql id="brand_colunm">-->
-<!--        id ,brand_name as brandName,company_name as companyName,ordered,description,status-->
-<!--    </sql>-->
+    <!--    <sql id="brand_colunm">-->
+    <!--        id ,brand_name as brandName,company_name as companyName,ordered,description,status-->
+    <!--    </sql>-->
 
-<!--注意对列名的检查-->
-<!--    <select id="selectAll" resultType="Brand">-->
-<!--        select <include refid="brand_colunm"></include>-->
-<!--from tb_brand;-->
+    <!--注意对列名的检查-->
+    <!--    <select id="selectAll" resultType="Brand">-->
+    <!--        select <include refid="brand_colunm"></include>-->
+    <!--from tb_brand;-->
 
-<!--    </select>-->
-<resultMap id="brandResultMap" type="brand">
-    <result column="brand_name" property="brandName"/>
-    <result column="company_name" property="companyName"/>
+    <!--    </select>-->
+    <resultMap id="brandResultMap" type="brand">
+        <result column="brand_name" property="brandName"/>
+        <result column="company_name" property="companyName"/>
 
-</resultMap>
+    </resultMap>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+
+        insert into tb_brand(brand_name, company_name, ordered, description, status)
+        values (#{brandName}, #{companyName}, #{ordered}, #{description}, #{status});
+
+    </insert>
+
+    <update id="update">
+        update tb_brand
+        <set>
+            <if test="brandName != null and brandName != ''">
+                brand_name = #{brandName},
+            </if>
+            <if test="companyName != null and companyName != ''">
+                company_name = #{companyName},
+            </if>
+            <if test="ordered != null">
+                ordered = #{ordered},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id};
+
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from tb_brand
+        where id = #{id};
+
+
+    </delete>
+
+    <!-- separator=","以逗号分隔
+    open="("    以左括号开始
+    close=")"   以右括号结束    -->
+    <delete id="deleteByIds">
+        delete from tb_brand where id
+        in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        ;
+    </delete>
 
 
     <select id="selectAll" resultMap="brandResultMap">
@@ -28,20 +77,53 @@
         from tb_brand;
 
     </select>
+
     <select id="selectById" resultMap="brandResultMap">
         select *
         from tb_brand
-where id=#{id}
+        where id = #{id}
     </select>
     <!--
         条件查询
     -->
     <select id="selectByCondition" resultMap="brandResultMap">
-         select *
-         from tb_brand
-         where status = #{status}
-           and company_name like #{companyName}
-           and brand_name like #{brandName}
-     </select>
+        select *
+        from tb_brand
+        where 1=1
+        <if test="status!=null">
+            and status = #{status}
+        </if>
+        <if test="companyName!=null and companyName!=''">
+            and company_name like #{companyName}
+        </if>
+        <if test="brandName!=null and brandName!=''">
+            and brand_name like #{brandName}
+        </if>
+    </select>
+
+
+    <select id="selectByConditionSingle" resultMap="brandResultMap">
+        select *
+        from tb_brand
+        <where>
+
+            <choose>
+                <when test="status!=null">
+                    status=#{status}
+                </when>
+                <when test="companyName!=null and companyName!=''">
+                    company_name like #{companyName}
+                </when>
+                <when test="brandName!=null and brandName!=''">
+                    brand_name like #{brandName}
+                </when>
+                <otherwise>
+                    1=1
+                </otherwise>
+            </choose>
+        </where>
+
+
+    </select>
 
 </mapper>
